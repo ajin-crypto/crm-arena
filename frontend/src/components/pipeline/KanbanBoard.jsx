@@ -51,7 +51,8 @@ function buildColumns(opps) {
 }
 
 export default function KanbanBoard() {
-  const { data: opps = [], isLoading } = usePipeline()
+  const { data, isLoading } = usePipeline()
+  const opps = Array.isArray(data) ? data : []
   const moveOpp = useMoveOpportunity()
 
   const [columns, setColumns] = useState({})

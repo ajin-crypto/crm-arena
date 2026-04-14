@@ -10,7 +10,8 @@ export default function LeadsTable() {
   const [page, setPage] = useState(1)
   const { filters, setSelectedLead } = useLeadsStore()
 
-  const { data: leads = [], isLoading, isError } = useLeads(filters)
+  const { data, isLoading, isError } = useLeads(filters)
+  const leads = Array.isArray(data) ? data : []
 
   const totalPages = Math.max(1, Math.ceil(leads.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)

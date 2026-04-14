@@ -11,7 +11,8 @@ export default function ContactsTable() {
   const [page, setPage] = useState(1)
   const { alphaFilter, search } = useContactsStore()
 
-  const { data: filtered = [], isLoading, isError } = useContacts({ alpha: alphaFilter, search })
+  const { data, isLoading, isError } = useContacts({ alpha: alphaFilter, search })
+  const filtered = Array.isArray(data) ? data : []
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
