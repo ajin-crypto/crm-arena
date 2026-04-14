@@ -1,0 +1,40 @@
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# Google OAuth credentials (WAT framework)
+credentials.json
+token.json
+
+# Temporary processing files
+.tmp/
+
+# Frontend build output
+frontend/dist/
+frontend/.vite/
+
+# Node modules
+frontend/node_modules/
+
+# Python backend
+backend/__pycache__/
+backend/*.pyc
+backend/.venv/
+backend/venv/
+backend/*.db
+backend/*.sqlite
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
