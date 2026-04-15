@@ -62,6 +62,7 @@ class ContactBase(SQLModel):
 class Contact(ContactBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
 class ContactCreate(ContactBase):
@@ -83,6 +84,7 @@ class ContactUpdate(SQLModel):
 class ContactRead(ContactBase):
     id: int
     created_at: datetime
+    updated_at: datetime
 
 
 # ─────────────────────────────────────────────

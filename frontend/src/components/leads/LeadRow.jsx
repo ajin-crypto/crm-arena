@@ -52,7 +52,7 @@ export default function LeadRow({ lead, onClick }) {
 
       {/* Last Activity */}
       <td className="px-4 py-4 text-on-surface-variant text-sm whitespace-nowrap">
-        {lastActivity}
+        {lastActivity || '—'}
       </td>
 
       {/* Actions */}
