@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@/utils/cn'
@@ -18,23 +19,7 @@ export default function DealCard({ deal, isOverlay = false, onSelect }) {
     transition,
   }
 
-  // Track pointer to distinguish click from drag
-  const pointerStart = { current: null }
-
-  function handlePointerDown(e) {
-    pointerStart.current = { x: e.clientX, y: e.clientY }
-  }
-
-  function handlePointerUp(e) {
-    if (!pointerStart.current || !onSelect) return
-    const dx = Math.abs(e.clientX - pointerStart.current.x)
-    const dy = Math.abs(e.clientY - pointerStart.current.y)
-    // Only treat as click if pointer moved less than 5px (not a drag)
-    if (dx < 5 && dy < 5) {
-      onSelect(deal)
-    }
-    pointerStart.current = null
-  }
+  const wasDragging = useRef(false)
 
   return (
     <div
@@ -42,14 +27,22 @@ export default function DealCard({ deal, isOverlay = false, onSelect }) {
       style={style}
       {...attributes}
       {...listeners}
-      onPointerDown={(e) => {
-        handlePointerDown(e)
-        listeners?.onPointerDown?.(e)
+      onClick={() => {
+        // Only open detail if not a drag gesture
+        if (!wasDragging.current && onSelect) {
+          onSelect(deal)
+        }
+        wasDragging.current = false
       }}
-      onPointerUp={handlePointerUp}
+      onPointerMove={() => {
+        wasDragging.current = true
+      }}
+      onPointerDown={() => {
+        wasDragging.current = false
+      }}
       className={cn(
         'bg-surface-container-lowest p-5 rounded-xl shadow-sm border border-transparent',
-        'hover:border-primary/10 transition-all cursor-grab active:cursor-grabbing group',
+        'hover:border-primary/10 transition-all cursor-pointer active:cursor-grabbing group',
         isDragging && !isOverlay && 'opacity-40 scale-[0.98]',
         isOverlay && 'rotate-1 shadow-lg cursor-grabbing',
         deal.closed && 'grayscale-[0.3]',
