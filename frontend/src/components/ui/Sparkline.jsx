@@ -9,7 +9,7 @@ import { cn } from '@/utils/cn'
 
 export default function Sparkline({ data = [], className = '' }) {
   const gradId = useId()
-  if (!data.length) return null
+  if (data.length < 2) return null
 
   const W = 400
   const H = 100
