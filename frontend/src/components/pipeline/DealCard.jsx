@@ -19,6 +19,7 @@ export default function DealCard({ deal, isOverlay = false, onSelect }) {
     transition,
   }
 
+  const pointerOrigin = useRef(null)
   const wasDragging = useRef(false)
 
   return (
@@ -28,17 +29,23 @@ export default function DealCard({ deal, isOverlay = false, onSelect }) {
       {...attributes}
       {...listeners}
       onClick={() => {
-        // Only open detail if not a drag gesture
         if (!wasDragging.current && onSelect) {
           onSelect(deal)
         }
         wasDragging.current = false
+        pointerOrigin.current = null
       }}
-      onPointerMove={() => {
-        wasDragging.current = true
+      onPointerMove={(e) => {
+        if (!pointerOrigin.current) return
+        const dx = e.clientX - pointerOrigin.current.x
+        const dy = e.clientY - pointerOrigin.current.y
+        if (Math.sqrt(dx * dx + dy * dy) > 5) {
+          wasDragging.current = true
+        }
       }}
-      onPointerDown={() => {
+      onPointerDown={(e) => {
         wasDragging.current = false
+        pointerOrigin.current = { x: e.clientX, y: e.clientY }
       }}
       className={cn(
         'bg-surface-container-lowest p-5 rounded-xl shadow-sm border border-transparent',

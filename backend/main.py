@@ -1,4 +1,5 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -8,28 +9,33 @@ from routers import leads, contacts, pipeline, analytics
 
 load_dotenv()
 
+
+# ─── Lifespan ────────────────────────────────────────────────────────────────
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+    yield
+
+
 app = FastAPI(
     title="CRM Arena API",
     version="0.1.0",
     description="Backend API for CRM Arena — Leadrax sales intelligence platform.",
     redirect_slashes=False,
+    lifespan=lifespan,
 )
 
 # ─── CORS ────────────────────────────────────────────────────────────────────
-# Allow ALL origins for now to fix CORS issues
+_raw_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173")
+allowed_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# ─── Startup ─────────────────────────────────────────────────────────────────
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
 
 
 # ─── Routers ─────────────────────────────────────────────────────────────────

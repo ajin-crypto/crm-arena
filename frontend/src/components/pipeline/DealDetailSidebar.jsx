@@ -68,8 +68,8 @@ export default function DealDetailSidebar({ deal, onClose }) {
 
           {/* Deal value overlay */}
           <div className="absolute bottom-3 left-4">
-            <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest">Deal Value</p>
-            <p className="text-white text-2xl font-headline font-extrabold">
+            <p className="text-on-primary/70 text-[10px] font-bold uppercase tracking-widest">Deal Value</p>
+            <p className="text-on-primary text-2xl font-headline font-extrabold">
               {formatCurrency(deal.value)}
             </p>
           </div>

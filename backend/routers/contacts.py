@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session, select
@@ -58,7 +59,9 @@ def update_contact(contact_id: int, updates: ContactUpdate, session: Session = D
     contact = session.get(Contact, contact_id)
     if not contact:
         raise HTTPException(status_code=404, detail="Contact not found")
-    contact.sqlmodel_update(updates.model_dump(exclude_unset=True))
+    data = updates.model_dump(exclude_unset=True)
+    data["updated_at"] = datetime.utcnow()
+    contact.sqlmodel_update(data)
     session.add(contact)
     session.commit()
     session.refresh(contact)

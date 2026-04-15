@@ -19,7 +19,6 @@ def get_summary(session: Session = Depends(get_session)):
     leads = session.exec(select(Lead)).all()
 
     total_deals = len(opps)
-    closed_won = [o for o in opps if o.stage == "closed" and not o.closed is False]
     # treat stage=="closed" as won for analytics
     closed_opps = [o for o in opps if o.stage == "closed"]
     open_opps = [o for o in opps if o.stage != "closed"]
