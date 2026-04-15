@@ -36,6 +36,8 @@ function oppToCard(opp) {
     vip: opp.vip,
     closed: opp.closed,
     showProgress: opp.probability >= 70,
+    // Raw data for detail sidebar
+    _raw: opp,
   }
 }
 
@@ -50,7 +52,7 @@ function buildColumns(opps) {
   return cols
 }
 
-export default function KanbanBoard() {
+export default function KanbanBoard({ onSelectDeal }) {
   const { data, isLoading } = usePipeline()
   const opps = Array.isArray(data) ? data : []
   const moveOpp = useMoveOpportunity()
@@ -166,6 +168,7 @@ export default function KanbanBoard() {
             key={stage.id}
             stage={stage}
             deals={columns[stage.id] || []}
+            onSelectDeal={onSelectDeal}
           />
         ))}
 

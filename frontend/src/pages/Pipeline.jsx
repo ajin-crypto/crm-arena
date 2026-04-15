@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import KanbanBoard from '@/components/pipeline/KanbanBoard'
+import DealDetailSidebar from '@/components/pipeline/DealDetailSidebar'
 import { useAnalyticsSummary } from '@/hooks/useAnalytics'
 
 export default function Pipeline() {
   const [view, setView] = useState('board')
+  const [selectedDeal, setSelectedDeal] = useState(null)
   const { data: summary } = useAnalyticsSummary()
 
   const totalValue = summary?.total_pipeline
@@ -59,9 +61,17 @@ export default function Pipeline() {
         </div>
       </section>
 
-      {/* Kanban board — flex-1 takes remaining height, overflow-x enables horizontal scroll */}
-      <section className="flex-1 overflow-x-auto overflow-y-hidden px-6 lg:px-8 no-scrollbar">
-        <KanbanBoard />
+      {/* Kanban board + Detail Sidebar */}
+      <section className="flex-1 flex overflow-hidden">
+        {/* Kanban board — flex-1 takes remaining width, overflow-x enables horizontal scroll */}
+        <div className="flex-1 overflow-x-auto overflow-y-hidden px-6 lg:px-8 no-scrollbar">
+          <KanbanBoard onSelectDeal={(deal) => setSelectedDeal(deal._raw || deal)} />
+        </div>
+
+        {/* Deal detail sidebar */}
+        <div className="flex-shrink-0 pr-6 lg:pr-8 overflow-y-auto">
+          <DealDetailSidebar deal={selectedDeal} onClose={() => setSelectedDeal(null)} />
+        </div>
       </section>
     </div>
   )

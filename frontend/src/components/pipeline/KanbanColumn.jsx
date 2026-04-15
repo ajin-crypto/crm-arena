@@ -3,7 +3,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { cn } from '@/utils/cn'
 import DealCard from './DealCard'
 
-export default function KanbanColumn({ stage, deals }) {
+export default function KanbanColumn({ stage, deals, onSelectDeal }) {
   const { setNodeRef, isOver } = useDroppable({ id: stage.id })
 
   const totalValue = stage.totalValue
@@ -38,7 +38,7 @@ export default function KanbanColumn({ stage, deals }) {
           )}
         >
           {deals.map((deal) => (
-            <DealCard key={deal.id} deal={deal} />
+            <DealCard key={deal.id} deal={deal} onSelect={onSelectDeal} />
           ))}
 
           {/* Empty drop target hint */}
