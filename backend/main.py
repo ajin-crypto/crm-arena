@@ -17,19 +17,11 @@ app = FastAPI(
 )
 
 # ─── CORS ────────────────────────────────────────────────────────────────────
-# ALLOWED_ORIGINS env var is a comma-separated list of origins.
-# Defaults to localhost dev server when not set.
-_raw_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
-origins = [o.strip() for o in _raw_origins.split(",") if o.strip()]
-
-# Allow all Vercel preview deployments
-origins.append("https://crm-arena.vercel.app")
-
+# Allow ALL origins for now to fix CORS issues
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_origin_regex=r"https://crm-arena.*\.vercel\.app",
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
